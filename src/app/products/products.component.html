@@ -1,0 +1,54 @@
+<div *ngIf="products">
+  <h3 class="">{{title}}</h3>
+  <div  *ngFor="let p of products._embedded.products">
+    <div class="col-md-6">
+      <div class="panel panel-default heighted">
+        <div class="panel-heading">{{p.name}}</div>
+        <div class="panel-body">
+          <img class="img-thumbnail img-rounded btn" (click)="onProductDetails(p)"
+               src="{{this.catalogueService.host+'/photoProduct/'+this.p.id+'?ts='+getTimeStamp()}}">
+
+
+          <div *ngIf="authService.isAdmin()">
+            <p>
+              <button (click)="onEditPhoto(p)">
+                <span class="glyphicon glyphicon-edit"></span>
+              </button>
+            </p>
+            <p *ngIf="p == currentProduct">
+              <input type="file" (change)="onSelectedFile($event)">
+              <button class="btn btn-success" (click)="uploadPhoto()">Upload</button>
+              {{progress}}
+            </p>
+          </div>
+          <div>
+            {{p.description}}
+          </div>
+          <div>
+            <label>Price : {{p.currentPrice| number:'0.2'}}</label>
+          </div>
+          <div>
+            <span *ngIf="p.promotion">
+            <img class="img-circle" src="assets/images/promo.png" height="30" >
+            </span>
+            <span *ngIf="p.selected">
+              <img class=" img-circle" src="assets/images/favorite.png" height="30">
+            </span>
+            <span *ngIf="p.available">
+                <img class="img-circle" src="assets/images/available.png" height="30">
+            </span>
+          </div>
+          <div >
+            <form  #f="ngForm" (ngSubmit)="onAddProductToCady(p)">
+              <label class="control-label">Quantité :</label>
+              <input type="number" name="Quantity" [(ngModel)]="p.quantity" style="width: 40px">
+              <button>
+                <img style="width: 20px; height: 20px" src="assets/images/caddy.png" >
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

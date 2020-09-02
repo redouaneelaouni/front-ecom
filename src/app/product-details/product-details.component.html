@@ -1,0 +1,94 @@
+<div *ngIf="product">
+  <div class="panel panel-default heighted">
+    <div class="panel-heading">Fiche de Produit :{{product.name}}
+      <span class="glyphicon glyphicon-edit pull-right btn" (click)="onEditProduct()"></span>
+    </div>
+    <div class="panel-body">
+      <div class="col-md-5">
+        <img class="img-thumbnail img-rounded btn"
+             src="{{this.catalogueService.host+'/photoProduct/'+this.product.id+'?ts='+getTimeStamp()}}">
+
+
+        <div *ngIf="authenticationService.isAdmin()">
+          <p>
+            <button (click)="onEditPhoto(currentProduct)" *ngIf="!editPhoto">
+              <span class="glyphicon glyphicon-edit"></span>
+            </button>
+          </p>
+          <p *ngIf="currentProduct == currentProduct">
+            <input type="file" (change)="onSelectedFile($event)">
+            <button class="btn btn-success btn-sm" (click)="uploadPhoto()">
+              <span class="glyphicon glyphicon-upload"></span>
+            </button>
+            {{progress}}
+          </p>
+
+          <div>
+            <span *ngIf="product.promotion">
+            <img class="img-circle" src="assets/images/promo.png" height="30">
+            </span>
+            <span *ngIf="product.selected">
+              <img class=" img-circle" src="assets/images/favorite.png" height="30">
+            </span>
+            <span *ngIf="product.available">
+                <img class="img-circle" src="assets/images/available.png" height="30">
+            </span>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-7" >
+          <div class="panel panel-default" >
+            <div class="panel-body">
+              Description :  {{product.description}}
+            </div>
+            <div class="panel-body">
+              <label>Price : {{product.currentPrice| number:'0.2'}}</label>
+            </div>
+          </div>
+
+
+        <div>
+          <form #f="ngForm" (ngSubmit)="onAddProductToCady(currentProduct)">
+            <label class="control-label">Quantité :</label>
+            <input type="number" name="Quantity" [(ngModel)]="product.quantity" style="width: 40px">
+            <button>
+              <img style="width: 20px; height: 20px" src="assets/images/caddy.png">
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div *ngIf="mode==1">
+  <form #f="ngForm" (ngSubmit)="onUpdateProduct()">
+    <div class="form-group">
+      <label class="control-label">Name :</label>
+      <input type="text" name="name" [(ngModel)]="currentProduct.name" class="form-control">
+    </div>
+    <div class="form-group">
+      <label class="control-label">Description :</label>
+
+      <textarea name="description" [(ngModel)]="currentProduct.description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="control-label">Price :</label>
+      <input type="text" name="currentPrice" [(ngModel)]="currentProduct.currentPrice" class="form-control">
+    </div>
+    <div class="form-group">
+      <label class="control-label">Promotion :</label>
+      <input type="checkbox" name="promotion" [(ngModel)]="currentProduct.promotion">
+    </div>
+    <div class="form-group">
+      <label class="control-label">Sélection :</label>
+      <input type="checkbox" name="selected" [(ngModel)]="currentProduct.selected">
+    </div>
+    <div class="form-group">
+      <label class="control-label">Available :</label>
+      <input type="checkbox" name="available" ngModel [(ngModel)]="currentProduct.available">
+    </div>
+    <button class="btn btn-success" type="submit">Update</button>
+  </form>
+</div>
+
